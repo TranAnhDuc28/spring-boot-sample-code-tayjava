@@ -1,0 +1,18 @@
+spring:
+  config:
+    activate:
+      on-profile: test
+
+springdoc:
+  api-docs:
+    enabled: true
+  swagger-ui:
+    enabled: true
+openapi:
+  service:
+    title: ${API_TITLE:DUMMY-API-TITLE}
+    version: v1.0.0
+    description: Mota API service
+    serverUrl: http://localhost:${server.port}
+    serverName: server test
+    api-docs: api-service

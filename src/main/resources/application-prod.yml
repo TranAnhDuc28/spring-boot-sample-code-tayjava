@@ -1,0 +1,18 @@
+spring:
+  config:
+    activate:
+      on-profile: prod
+
+springdoc:
+  api-docs:
+    enabled: true
+  swagger-ui:
+    enabled: true
+openapi:
+  service:
+    title: API document
+    version: v1.0.0
+    description: Mota API service
+    serverUrl: http://localhost:${server.port}
+    serverName: server prod
+    api-docs: api-service
