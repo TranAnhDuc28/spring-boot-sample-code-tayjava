@@ -1,6 +1,6 @@
 package com.demo.service.impl;
 
-import com.demo.dto.reponse.PageResponse;
+import com.demo.dto.common.PageResponse;
 import com.demo.dto.reponse.UserDetailResponse;
 import com.demo.dto.request.AddressDTO;
 import com.demo.dto.request.UserRequestDTO;
@@ -11,14 +11,16 @@ import com.demo.repository.SearchRepository;
 import com.demo.repository.UserRepository;
 import com.demo.repository.specification.UserSpecificationsBuilder;
 import com.demo.service.UserService;
-import com.demo.util.UserStatus;
-import com.demo.util.UserType;
+import com.demo.enums.UserStatus;
+import com.demo.enums.UserType;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
@@ -37,6 +39,12 @@ public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
     private final SearchRepository searchRepository;
+
+    @Override
+    public UserDetailsService userDetailsService() {
+        return username -> userRepository.findByUsername(username)
+                .orElseThrow(() -> new UsernameNotFoundException("User not found."));
+    }
 
     @Override
     public long saveUser(UserRequestDTO request) {

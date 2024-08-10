@@ -1,13 +1,12 @@
 package com.demo.controller;
 
 import com.demo.configuration.Translator;
-import com.demo.dto.reponse.ResponseData;
-import com.demo.dto.reponse.ResponseError;
-import com.demo.dto.reponse.UserDetailResponse;
+import com.demo.dto.common.ResponseData;
+import com.demo.dto.common.ResponseError;
 import com.demo.dto.request.UserRequestDTO;
 import com.demo.exception.ResourceNotFoundException;
 import com.demo.service.UserService;
-import com.demo.util.UserStatus;
+import com.demo.enums.UserStatus;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.ExampleObject;
@@ -18,10 +17,11 @@ import jakarta.validation.constraints.Min;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Pageable;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+
+import static org.springframework.http.HttpStatus.*;
 
 @RestController
 @RequestMapping("/user")
@@ -48,15 +48,15 @@ public class UserController {
                             )))
     })
     @PostMapping(value = "/")
-    public ResponseData<Long> addUser(@Valid @RequestBody UserRequestDTO userDTO) {
+    public ResponseData<?> addUser(@Valid @RequestBody UserRequestDTO userDTO) {
         log.info("Request add user = {} {}", userDTO.getFirstName(), userDTO.getLastName());
 
         try {
             long userId = userService.saveUser(userDTO);
-            return new ResponseData<>(HttpStatus.CREATED.value(), Translator.toLocale("user.add.success"), userId);
+            return new ResponseData<>(CREATED.value(), Translator.toLocale("user.add.success"), userId);
         } catch (Exception e) {
             log.error("errorMessage={}", e.getMessage(), e.getCause());
-            return new ResponseError(HttpStatus.BAD_REQUEST.value(), "Add user fail");
+            return new ResponseError(BAD_REQUEST.value(), "Add user fail");
         }
 
     }
@@ -69,10 +69,10 @@ public class UserController {
 
         try {
             userService.updateUser(userId, user);
-            return new ResponseData<>(HttpStatus.ACCEPTED.value(), Translator.toLocale("user.update.success"));
+            return new ResponseData<>(ACCEPTED.value(), Translator.toLocale("user.update.success"));
         } catch (Exception e) {
             log.error("errorMessage={}", e.getMessage(), e.getCause());
-            return new ResponseError(HttpStatus.BAD_REQUEST.value(), "Update user fail");
+            return new ResponseError(BAD_REQUEST.value(), "Update user fail");
         }
 
     }
@@ -85,10 +85,10 @@ public class UserController {
 
         try {
             userService.changeStatus(userId, status);
-            return new ResponseData<>(HttpStatus.ACCEPTED.value(), Translator.toLocale("user.change.success"));
+            return new ResponseData<>(ACCEPTED.value(), Translator.toLocale("user.change.success"));
         } catch (Exception e) {
             log.error("errorMessage={}", e.getMessage(), e.getCause());
-            return new ResponseError(HttpStatus.BAD_REQUEST.value(), "Change user fail");
+            return new ResponseError(BAD_REQUEST.value(), "Change user fail");
         }
     }
 
@@ -100,23 +100,23 @@ public class UserController {
 
         try {
             userService.deleteUser(userId);
-            return new ResponseData<>(HttpStatus.ACCEPTED.value(), Translator.toLocale("user.del.success"));
+            return new ResponseData<>(ACCEPTED.value(), Translator.toLocale("user.del.success"));
         } catch (Exception e) {
             log.error("errorMessage={}", e.getMessage(), e.getCause());
-            return new ResponseError(HttpStatus.BAD_REQUEST.value(), "Change user fail");
+            return new ResponseError(BAD_REQUEST.value(), "Delete user fail");
         }
     }
 
 
     @Operation(summary = "Get user detail", description = "Send a request via this API to get user information")
     @GetMapping("/{userId}")
-    public ResponseData<UserDetailResponse> getUser(@Min(1) @PathVariable long userId) {
+    public ResponseData<?> getUser(@Min(1) @PathVariable long userId) {
         log.info("Request get user detail by userId = {}", userId);
         try {
-            return new ResponseData<>(HttpStatus.OK.value(), "User", userService.getUser(userId));
+            return new ResponseData<>(OK.value(), "User", userService.getUser(userId));
         } catch (ResourceNotFoundException e) {
             log.error("errorMessage={}", e.getMessage(), e.getCause());
-            return new ResponseError(HttpStatus.BAD_REQUEST.value(), e.getMessage());
+            return new ResponseError(BAD_REQUEST.value(), e.getMessage());
         }
     }
 
@@ -128,7 +128,7 @@ public class UserController {
                                        @Min(10) @RequestParam(defaultValue = "20", required = false) int pageSize,
                                        @RequestParam(required = false) String sortBy) {
         log.info("Request get all of users with sort by column");
-        return new ResponseData<>(HttpStatus.OK.value(), "Users", userService.getAllUsersWithSortBy(pageNo, pageSize, sortBy));
+        return new ResponseData<>(OK.value(), "Users", userService.getAllUsersWithSortBy(pageNo, pageSize, sortBy));
     }
 
 
@@ -139,7 +139,7 @@ public class UserController {
                                                                 @RequestParam(defaultValue = "20", required = false) int pageSize,
                                                                 @RequestParam(required = false) String... sorts) {
         log.info("Request get user list with paging, sort by multiple columns");
-        return new ResponseData<>(HttpStatus.OK.value(), "Users", userService.getAllUsersWithSortByMultipleColumns(pageNo, pageSize, sorts));
+        return new ResponseData<>(OK.value(), "Users", userService.getAllUsersWithSortByMultipleColumns(pageNo, pageSize, sorts));
     }
 
 
@@ -151,7 +151,7 @@ public class UserController {
                                                                          @RequestParam(required = false) String search,
                                                                          @RequestParam(required = false) String sortBy) {
         log.info("Request get user list with paging, sort and search customize query");
-        return new ResponseData<>(HttpStatus.OK.value(), "Users", userService.getAllUsersWithSortByColumnAndSearch(pageNo, pageSize, search, sortBy));
+        return new ResponseData<>(OK.value(), "Users", userService.getAllUsersWithSortByColumnAndSearch(pageNo, pageSize, search, sortBy));
     }
 
 
@@ -164,7 +164,7 @@ public class UserController {
                                                                 @RequestParam(required = false) String address,
                                                                 @RequestParam(defaultValue = "") String... search) {
         log.info("Request get list of users paging, sorting and advance search with criteria");
-         return new ResponseData<>(HttpStatus.OK.value(), "Users", userService.advanceSearchWithCriteria(pageNo, pageSize, sortBy, address, search));
+         return new ResponseData<>(OK.value(), "Users", userService.advanceSearchWithCriteria(pageNo, pageSize, sortBy, address, search));
     }
 
 
@@ -175,6 +175,6 @@ public class UserController {
                                                    @RequestParam(required = false) String[] user,
                                                    @RequestParam(required = false) String[] address) {
         log.info("Request advance search with criteria and paging and sorting");
-        return new ResponseData<>(HttpStatus.OK.value(), "Users", userService.advanceSearchWithSpecification(pageable, user, address));
+        return new ResponseData<>(OK.value(), "Users", userService.advanceSearchWithSpecification(pageable, user, address));
     }
 }

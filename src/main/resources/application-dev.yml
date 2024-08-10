@@ -1,31 +1,34 @@
-  spring:
-    config:
-      activate:
-        on-profile: dev
-    datasource:
-      url: ${POSTGRES_URL:jdbc:postgresql://localhost:5432/postgres}
-      username: ${POSTGRES_USER:postgres}
-      password: ${POSTGRES_PASSWORD:123456}
-    jpa:
-      properties:
-        hibernate:
-          dialect: org.hibernate.dialect.PostgreSQLDialect
-      show-sql: true
+spring:
+  config:
+    activate:
+      on-profile: dev
+  datasource:
+    url: ${POSTGRES_URL:jdbc:postgresql://localhost:5432/db-jwt-security-demo}
+    username: ${POSTGRES_USER:postgres}
+    password: ${POSTGRES_PASSWORD:123456}
+  jpa:
+    properties:
       hibernate:
-        ddl-auto: none
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+    show-sql: true
+    hibernate:
+      ddl-auto: none
 
-  springdoc:
-    api-docs:
-      enabled: true
-    swagger-ui:
-      enabled: true
-  openapi:
-    service:
-      title: ${API_TITLE:DUMMY-API-TITLE}
-      version: v1.0.0
-      description: Mota API service
-      serverUrl: http://localhost:${server.port}
-      serverName: server dev
-      api-docs: api-service
+springdoc:
+  api-docs:
+    enabled: true
+  swagger-ui:
+    enabled: true
+openapi:
+  service:
+    title: ${API_TITLE:DUMMY-API-TITLE}
+    version: v1.0.0
+    description: Mota API service
+    serverUrl: http://localhost:${server.port}
+    serverName: server dev
+    api-docs: api-service
 
-#  ${API_TITLE:DUMMY-API-TITLE}
+jwt:
+  expiryHour: 1
+  expiryDay: 14
+  secretKey: 3CAA8CAC542D2F130481351D6CF702E937F961846B7BB581DE851FEFE2B88CFD

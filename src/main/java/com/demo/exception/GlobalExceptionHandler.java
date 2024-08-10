@@ -118,7 +118,7 @@ public class GlobalExceptionHandler {
     }
 
     /**
-     * Handle exception when the data is cònlicted
+     * Handle exception when the data is conflicted
      *
      * @param e
      * @param request
@@ -143,7 +143,7 @@ public class GlobalExceptionHandler {
                             """
             ))})
     })
-    public ErrorResponse handleInvalidDataExceptionException(InvalidDataException e, WebRequest request) {
+    public ErrorResponse handleInvalidDataException(InvalidDataException e, WebRequest request) {
         ErrorResponse errorResponse = new ErrorResponse();
         errorResponse.setTimestamp(new Date());
         errorResponse.setStatus(CONFLICT.value());

@@ -1,12 +1,15 @@
 package com.demo.service;
 
-import com.demo.dto.reponse.PageResponse;
+import com.demo.dto.common.PageResponse;
 import com.demo.dto.reponse.UserDetailResponse;
 import com.demo.dto.request.UserRequestDTO;
-import com.demo.util.UserStatus;
+import com.demo.enums.UserStatus;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.core.userdetails.UserDetailsService;
 
 public interface UserService {
+
+    UserDetailsService userDetailsService();
 
     long saveUser(UserRequestDTO request);
 

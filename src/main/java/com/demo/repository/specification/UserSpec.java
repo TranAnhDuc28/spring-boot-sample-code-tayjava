@@ -1,7 +1,7 @@
 package com.demo.repository.specification;
 
 import com.demo.model.User;
-import com.demo.util.Gender;
+import com.demo.enums.Gender;
 import org.springframework.data.jpa.domain.Specification;
 
 public class UserSpec {

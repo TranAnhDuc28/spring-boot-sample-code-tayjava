@@ -15,12 +15,7 @@ import java.util.Date;
 @AllArgsConstructor
 @Entity
 @Table(name = "tbl_address")
-public class Address extends AbstractEntity{
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
-    private Long id;
+public class Address extends AbstractEntity<Long>{
 
     @Column(name = "apartment_number")
     private String apartmentNumber;

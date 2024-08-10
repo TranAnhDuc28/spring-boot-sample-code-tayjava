@@ -1,4 +1,4 @@
-package com.demo.dto.reponse;
+package com.demo.dto.common;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;

@@ -1,6 +1,6 @@
 package com.demo.validator;
 
-import com.demo.util.Gender;
+import com.demo.enums.Gender;
 import jakarta.validation.Constraint;
 import jakarta.validation.Payload;
 

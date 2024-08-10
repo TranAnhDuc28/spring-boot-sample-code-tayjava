@@ -1,6 +1,8 @@
 package com.demo.dto.request;
 
-import com.demo.util.*;
+import com.demo.enums.Gender;
+import com.demo.enums.UserStatus;
+import com.demo.enums.UserType;
 import com.demo.validator.EnumPattern;
 import com.demo.validator.EnumValue;
 import com.demo.validator.GenderSubset;
@@ -14,7 +16,7 @@ import java.io.Serializable;
 import java.util.Date;
 import java.util.Set;
 
-import static com.demo.util.Gender.*;
+import static com.demo.enums.Gender.*;
 
 @Getter
 public class UserRequestDTO implements Serializable {

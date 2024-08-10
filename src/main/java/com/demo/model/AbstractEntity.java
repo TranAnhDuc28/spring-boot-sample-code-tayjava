@@ -5,7 +5,12 @@ import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
+import org.springframework.data.annotation.CreatedBy;
+import org.springframework.data.annotation.LastModifiedBy;
 
+import java.io.Serializable;
+import java.time.Instant;
+import java.time.LocalDateTime;
 import java.util.Date;
 
 @Getter
@@ -18,7 +23,7 @@ import java.util.Date;
  * - Kế thừa các thuộc tính chung: Các entity class kế thừa sẽ tự động có các thuộc tính được khai báo trong superclass.
  */
 @MappedSuperclass
-public abstract class AbstractEntity {
+public abstract class AbstractEntity<T extends Serializable> implements Serializable{
 
     /**
      * - Annotation @CreationTimestamp này tự động điền giá trị của trường (field) với timestamp hiện tại khi
@@ -30,17 +35,27 @@ public abstract class AbstractEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
-    private Long id;
+    private T id;
 
-    // lưu thời gian record được tạo ra
-    @Column(name = "created_at")
-    @CreationTimestamp
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date createAt;
-
-    // lưu thời gian record được update lần cuối
-    @Column(name = "updated_at")
-    @UpdateTimestamp
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date updateAt;
+    // user tạo mới record
+//    @CreatedBy
+//    @Column(name = "created_by")
+//    private T createdBy; // tự động thêm vào userId của người thêm mới
+//
+//    // user update cuối cùng
+//    @LastModifiedBy
+//    @Column(name = "updated_by")
+//    private T updateBy; // tự động thêm vào userId của người cập nhật cuối cùng
+//
+//    // lưu thời gian record được tạo ra
+//    @Column(name = "created_at")
+//    @CreationTimestamp
+//    @Temporal(TemporalType.TIMESTAMP)
+//    private LocalDateTime createAt;
+//
+//    // lưu thời gian record được update lần cuối
+//    @Column(name = "updated_at")
+//    @UpdateTimestamp
+//    @Temporal(TemporalType.TIMESTAMP)
+//    private LocalDateTime updateAt;
 }

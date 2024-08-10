@@ -1,21 +1,18 @@
 package com.demo.model;
 
-import com.demo.util.Gender;
-import com.demo.util.UserStatus;
-import com.demo.util.UserType;
+import com.demo.enums.Gender;
+import com.demo.enums.UserStatus;
+import com.demo.enums.UserType;
 import com.demo.validator.PhoneNumber;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.sun.jdi.LongValue;
 import jakarta.persistence.*;
 import lombok.*;
-import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.JdbcTypeCode;
-import org.hibernate.annotations.UpdateTimestamp;
 import org.hibernate.type.SqlTypes;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
-import java.util.Date;
-import java.util.HashSet;
-import java.util.Set;
+import java.io.Serializable;
+import java.util.*;
 
 @Getter
 @Setter
@@ -24,7 +21,7 @@ import java.util.Set;
 @AllArgsConstructor
 @Entity
 @Table(name = "tbl_user")
-public class User extends AbstractEntity {
+public class User extends AbstractEntity<Long> implements UserDetails, Serializable {
 
     /**
      *  - Annotation @Enumerated(EnumType.STRING) này cho phép bạn lưu các giá trị enum dưới dạng chuỗi (string)
@@ -77,9 +74,9 @@ public class User extends AbstractEntity {
     @Column(name = "type")
     private UserType type;
 
-    private Integer age;
-
-    private Boolean activated;
+//    private Integer age;
+//
+//    private Boolean activated;
 
 //    @JsonIgnore
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "user")
@@ -93,5 +90,42 @@ public class User extends AbstractEntity {
             addresses.add(address);
             address.setUser(this); // save user id
         }
+    }
+
+    @OneToMany(mappedBy = "user")
+    private Set<UserHasGroup> groups = new HashSet<>();
+
+    @OneToMany(mappedBy = "user")
+    private Set<UserHasRole> roles = new HashSet<>();
+
+
+    // lấy ra các quyền hạn của user
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return List.of();
+    }
+
+    // kiểm tra account(token) này có quá hạn hay không
+    @Override
+    public boolean isAccountNonExpired() {
+        return true;
+    }
+
+    // kiểm tra user này có bị khóa ko
+    @Override
+    public boolean isAccountNonLocked() {
+        return UserStatus.ACTIVE.equals(status);
+    }
+
+    // kiểm tra user này co bị khoá hay không
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true;
+    }
+
+    // user dk phép hiển thị hay k
+    @Override
+    public boolean isEnabled() {
+        return true;
     }
 }

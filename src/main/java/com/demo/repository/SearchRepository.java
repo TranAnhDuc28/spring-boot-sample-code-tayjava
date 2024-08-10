@@ -1,6 +1,6 @@
 package com.demo.repository;
 
-import com.demo.dto.reponse.PageResponse;
+import com.demo.dto.common.PageResponse;
 import com.demo.model.Address;
 import com.demo.model.User;
 import com.demo.repository.criteria.SearchCriteria;
