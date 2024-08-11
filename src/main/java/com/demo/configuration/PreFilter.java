@@ -1,5 +1,6 @@
 package com.demo.configuration;
 
+import com.demo.enums.TokenType;
 import com.demo.service.JwtService;
 import com.demo.service.UserService;
 import io.micrometer.common.util.StringUtils;
@@ -19,6 +20,8 @@ import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
 
+import static com.demo.enums.TokenType.ACCESS_TOKEN;
+
 @Component
 @Slf4j
 @RequiredArgsConstructor
@@ -33,7 +36,6 @@ public class PreFilter extends OncePerRequestFilter {
         log.info("---------------- PreFilter ----------------");
 
         final String authorization = request.getHeader("Authorization");
-        log.info("Authorization: {}", authorization);
 
         if (StringUtils.isBlank(authorization) || !authorization.startsWith("Bearer ")) {
             filterChain.doFilter(request, response);
@@ -41,11 +43,11 @@ public class PreFilter extends OncePerRequestFilter {
         }
 
         final String token = authorization.substring("Bearer ".length());
-        final String username = jwtService.extractUsername(token);
+        final String username = jwtService.extractUsername(token, ACCESS_TOKEN);
 
         if (StringUtils.isNotEmpty(username) && SecurityContextHolder.getContext().getAuthentication() == null) {
             UserDetails userDetails = userService.userDetailsService().loadUserByUsername(username);
-            if (jwtService.isValidToken(token, userDetails)) {
+            if (jwtService.isValidToken(token, ACCESS_TOKEN, userDetails)) {
                 SecurityContext context = SecurityContextHolder.createEmptyContext();
                 UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(
                         userDetails.getUsername(), null, userDetails.getAuthorities());

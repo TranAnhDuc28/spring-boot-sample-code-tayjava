@@ -149,7 +149,7 @@ public class GlobalExceptionHandler {
         errorResponse.setStatus(CONFLICT.value());
         errorResponse.setPath(request.getDescription(false).replace("uri=", ""));
         errorResponse.setError(CONFLICT.getReasonPhrase());
-        errorResponse.setError(e.getMessage());
+        errorResponse.setMessage(e.getMessage());
         return errorResponse;
     }
 

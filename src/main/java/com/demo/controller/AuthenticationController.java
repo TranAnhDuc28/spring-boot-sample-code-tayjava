@@ -1,6 +1,7 @@
 package com.demo.controller;
 
 import com.demo.dto.reponse.TokenResponse;
+import com.demo.dto.request.ResetPasswordDTO;
 import com.demo.dto.request.SignInRequest;
 import com.demo.service.AuthenticationService;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -25,19 +26,33 @@ public class AuthenticationController {
 
     private final AuthenticationService authenticationService;
 
-    @PostMapping("/access")
+    @PostMapping("/access-token")
     public ResponseEntity<TokenResponse> login(@RequestBody SignInRequest request) {
-        return new ResponseEntity<>(authenticationService.authenticate(request), HttpStatus.OK);
+        return new ResponseEntity<>(authenticationService.accessToken(request), HttpStatus.OK);
     }
 
-    @PostMapping("/refresh")
+    @PostMapping("/refresh-token")
     public ResponseEntity<TokenResponse> refresh(HttpServletRequest request) {
-        return new ResponseEntity<>(authenticationService.refresh(request), HttpStatus.OK);
+        return new ResponseEntity<>(authenticationService.refreshToken(request), HttpStatus.OK);
     }
 
-    @PostMapping("/logout")
-    public String logout() {
-        return "success";
+    @PostMapping("/remove-token")
+    public ResponseEntity<String> logout(HttpServletRequest request) {
+        return new ResponseEntity<>(authenticationService.removeToken(request), HttpStatus.OK);
     }
 
+    @PostMapping("/forgot-password")
+    public ResponseEntity<String> forgotPassword(@RequestBody String email) {
+        return new ResponseEntity<>(authenticationService.forgotPassword(email), HttpStatus.OK);
+    }
+
+    @PostMapping("/reset-password")
+    public ResponseEntity<String> resetPassword(@RequestBody String secretKey) {
+        return new ResponseEntity<>(authenticationService.resetPassword(secretKey), HttpStatus.OK);
+    }
+
+    @PostMapping("/change-password")
+    public ResponseEntity<String> changePassword(@RequestBody ResetPasswordDTO request) {
+        return new ResponseEntity<>(authenticationService.changePassword(request), HttpStatus.OK);
+    }
 }

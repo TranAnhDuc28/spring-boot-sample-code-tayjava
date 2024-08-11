@@ -48,14 +48,14 @@ public abstract class AbstractEntity<T extends Serializable> implements Serializ
 //    private T updateBy; // tự động thêm vào userId của người cập nhật cuối cùng
 //
 //    // lưu thời gian record được tạo ra
-//    @Column(name = "created_at")
-//    @CreationTimestamp
-//    @Temporal(TemporalType.TIMESTAMP)
-//    private LocalDateTime createAt;
-//
-//    // lưu thời gian record được update lần cuối
-//    @Column(name = "updated_at")
-//    @UpdateTimestamp
-//    @Temporal(TemporalType.TIMESTAMP)
-//    private LocalDateTime updateAt;
+    @Column(name = "created_at")
+    @CreationTimestamp
+    @Temporal(TemporalType.TIMESTAMP)
+    private LocalDateTime createAt;
+
+    // lưu thời gian record được update lần cuối
+    @Column(name = "updated_at")
+    @UpdateTimestamp
+    @Temporal(TemporalType.TIMESTAMP)
+    private LocalDateTime updateAt;
 }

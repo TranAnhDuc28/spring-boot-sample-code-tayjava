@@ -78,6 +78,12 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public long saveUser(User user) {
+        userRepository.save(user);
+        return user.getId();
+    }
+
+    @Override
     public void updateUser(long userId, UserRequestDTO request) {
         User user = getUserById(userId);
         user.setFirstName(request.getFirstName());
@@ -122,6 +128,15 @@ public class UserServiceImpl implements UserService {
                 .email(user.getEmail())
                 .phone(user.getPhone())
                 .build();
+    }
+
+    @Override
+    public User getUserByUsername(String username) {
+        return userRepository.findByUsername(username).orElseThrow(() -> new UsernameNotFoundException("User not found"));    }
+
+    @Override
+    public User getUserByEmail(String email) {
+        return userRepository.findByEmail(email).orElseThrow(() -> new ResourceNotFoundException("Email not found"));
     }
 
     @Override

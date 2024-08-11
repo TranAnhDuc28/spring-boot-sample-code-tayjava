@@ -1,4 +1,4 @@
-package com.demo.service.impl;
+package com.demo.service;
 
 import com.demo.repository.RoleRepository;
 import org.springframework.stereotype.Service;
